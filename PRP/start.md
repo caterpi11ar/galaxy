@@ -48,7 +48,7 @@
 - [ ] 5.3 配置包间依赖关系
 
 ### 6. 开发工具配置
-- [ ] 6.1 配置 ESLint（已存在，需更新）
+- [ ] 6.1 配置 ESLint（已存在，无需更新）
 - [ ] 6.2 配置 Prettier
 - [ ] 6.3 配置 TypeScript 根配置
 - [ ] 6.4 配置 Git hooks（husky + lint-staged）
