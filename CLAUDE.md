@@ -1,119 +1,104 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+此文件为 Claude Code 在此代码仓库中工作时提供指导。
 
-## Project Overview
+## 项目概述
 
-Galaxy is an innovative multiplayer online interactive mini-game where players draw, manage, and compete for their own planets in a shared universe. The game uses real-time interactive mechanisms to allow players to experience regional-level competition and cooperation between planets.
+Galaxy 是一个创新的多人在线互动小游戏，玩家可以绘制、管理自己的星球，并在共享宇宙中竞争。游戏使用实时互动机制，让玩家体验星球之间的区域级竞争与合作。
 
-### Authentication Methods
-- WeChat QR code + Google + GitHub login
-- Next.js built-in authentication with NextAuth.js
+### 认证方式
+- 微信二维码 + Google + GitHub 登录
+- 使用 NextAuth.js 的 Next.js 内置认证
 
-## Commands
+## 命令
 
-### Development Commands
+### 开发命令
 ```bash
-# Start Next.js development server
-npm run dev
-# or
-yarn dev
-# or
+# 启动 Next.js 开发服务器
+# 或
 pnpm dev
 
-# Build production version
-npm run build
-# or
-yarn build
-# or
+# 构建生产版本
 pnpm build
 
-# Start production server
-npm run start
-# or
-yarn start
-# or
+# 启动生产服务器
 pnpm start
 ```
 
-### Code Quality Commands
+### 代码质量命令
 ```bash
-# Lint and fix code
-npm run lint
-# or
+# 检查和修复代码
 pnpm lint
 
-# Type check
-npm run type-check
-# or
+# 类型检查
 pnpm type-check
 ```
 
-## Architecture
+## 架构
 
-### Next.js Full-Stack Structure
-This is a modern Next.js 14+ application with the App Router:
+### Next.js 全栈结构
+这是一个使用 App Router 的现代 Next.js 14+ 应用程序：
 
-- `app/` - Main application routes and layouts (App Router)
-- `app/api/` - API routes for backend functionality
-- `components/` - Reusable React components
-- `lib/` - Shared utilities and configurations
-- `public/` - Static assets
-- `types/` - TypeScript type definitions
-- `games/` - Game logic modules
+- `app/` - 主应用程序路由和布局（App Router）
+- `app/api/` - 后端功能的 API 路由
+- `components/` - 可重用的 React 组件
+- `lib/` - 共享工具和配置
+- `public/` - 静态资源
+- `types/` - TypeScript 类型定义
+- `games/` - 游戏逻辑模块
 
-### Key Technologies
-- **Framework**: Next.js 14+ (App Router)
-- **Frontend**: React 19, TypeScript
-- **Backend**: Next.js API Routes
-- **Database**: 待定 (建议 Prisma + PostgreSQL 或 SQLite)
-- **Authentication**: NextAuth.js
-- **Styling**: 待定 (建议 Tailwind CSS)
+### 核心技术
+- **框架**: Next.js 14+ (App Router)
+- **前端**: React 19, TypeScript
+- **后端**: Next.js API Routes
+- **数据库**: 待定 (建议 Prisma + PostgreSQL 或 SQLite)
+- **认证**: NextAuth.js
+- **样式**: 待定 (建议 Tailwind CSS)
 - **实时通信**: 智能轮询 + SSE (Server-Sent Events)
 
-### Development Workflow
-- Single repository with full-stack development
-- API routes handle backend logic and database operations
-- Server Actions for seamless client-server interactions
+### 开发工作流
+- 单仓库全栈开发
+- API 路由处理后端逻辑和数据库操作
+- Server Actions 实现无缝客户端-服务器交互
 - 实时功能通过智能轮询 + SSE 混合方案实现
-- Games implemented as separate modules in `/games` directory
+- 游戏作为 `/games` 目录中的独立模块实现
 
-### Code Quality Rules
-1. Avoid code duplication - extract common types and components
-2. Keep components focused - use hooks and component composition
-3. Follow React best practices - proper Context usage, state management
-4. Use TypeScript strictly - leverage type safety throughout
-5. Utilize Server Actions for data mutations
-6. Implement proper error boundaries and loading states
+### 代码质量规则
+1. 避免代码重复 - 提取通用类型和组件
+2. 保持组件专注 - 使用 hooks 和组件组合
+3. 遵循 React 最佳实践 - 正确使用 Context 和状态管理
+4. 严格使用 TypeScript - 充分利用整个应用的类型安全
+5. 利用 Server Actions 进行数据变更
+6. 实现适当的错误边界和加载状态
 
-### Testing Strategy
-- Use built-in Next.js testing capabilities
-- Verify builds work with `npm run build`
-- Validate types with type-check commands
-- Test API routes independently
+### 测试策略
+- 使用内置的 Next.js 测试功能
+- 使用 `npm run build` 验证构建工作
+- 使用类型检查命令验证类型
+- 独立测试 API 路由
 
-## Next.js Specific Patterns
+## Next.js 特定模式
 
-### File-based Routing
-- Use App Router for all new development
-- API routes in `app/api/` directory
-- Server Components by default, Client Components when needed
+### 基于文件的路由
+- 所有新开发使用 App Router
+- API 路由放在 `app/api/` 目录中
+- 默认使用 Server Components，需要时使用 Client Components
 
-### Data Fetching
-- Server Components for data fetching
-- Server Actions for mutations
-- Client-side state management with React hooks
+### 数据获取
+- Server Components 用于数据获取
+- Server Actions 用于数据变更
+- 使用 React hooks 进行客户端状态管理
 
-### Web-First 开发重点
+### Web 优先开发重点
 - 专注于 Web 平台的 Next.js 开发
 - 响应式设计支持不同屏幕尺寸
 - 使用 Next.js 中间件处理路由逻辑
 
-## Important Notes
-- This is a gaming platform built with Next.js full-stack architecture
-- Authentication uses NextAuth.js with WeChat and Google providers
-- Games are developed as modules within the single Next.js application
-- Focus on leveraging Next.js features for optimal performance
+## 重要说明
+- 这是一个基于 Next.js 全栈架构构建的游戏平台
+- 认证使用 NextAuth.js 配合微信和 Google 提供商
+- 游戏作为单个 Next.js 应用程序内的模块开发
+- 专注于利用 Next.js 功能实现最佳性能
 
 ## 实时通信架构设计
 
@@ -133,9 +118,9 @@ This is a modern Next.js 14+ application with the App Router:
 - 智能缓存减少重复数据传输
 - 数据差异化更新，只传输变化部分
 
-## Communication Principles
+## 沟通原则
 
-### Basic Communication Standards
+### 基本沟通标准
 
-- **Language Requirements**: Develop design theories in English, but always present final solutions in Chinese.
-- **Expression Style**: Professional, precise, and user-centric. If there are any design issues, you will clearly identify them and identify potential improvements.
+- **语言要求**: 用英语开发设计理论，但始终用中文展示最终解决方案。
+- **表达风格**: 专业、精确、以用户为中心。如果有任何设计问题，您将明确识别它们并指出潜在的改进方案。

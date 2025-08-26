@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-Galaxy 是一款创新的多人在线互动小游戏，玩家在一个共享的宇宙中绘制、管理和竞争自己的星球。游戏采用实时互动机制，让玩家体验星球间的区域级竞争与协作。
+Galaxy 是一款创新的多人在线互动像素风格小游戏，玩家在一个共享的宇宙中绘制、管理和竞争自己的星球。游戏采用实时互动机制，让玩家体验星球间的区域级竞争与协作。
 
 ## 技术架构
 
@@ -39,13 +39,13 @@ galaxy/
 #### 安装与运行
 ```bash
 # 安装依赖
-npm install  # 或 yarn install 或 pnpm install
+pnpm install
 
 # 开发模式
-npm run dev  # 或 yarn dev 或 pnpm dev
+pnpm dev
 
 # 构建生产版本
-npm run build && npm run start
+pnpm build && pnpm start
 ```
 
 访问 [http://localhost:3000](http://localhost:3000) 查看应用。
