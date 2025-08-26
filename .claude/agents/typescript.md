@@ -40,6 +40,7 @@ import { useState } from 'react'
 ```
 
 bad
+不要使用 React.XX 这种写法，使用 ReactNode 等类型代替
 ```typescript
-import { ReactNode, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 ```
