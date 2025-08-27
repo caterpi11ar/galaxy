@@ -1,26 +1,133 @@
 @import "tailwindcss";
 
+/* Galaxy Pixel Art Design System */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Deep Space Color Palette - Primary Colors */
+  --space-void: #0a0a0f;           /* 最深的宇宙背景 */
+  --space-deep: #1a1a2e;           /* 深空蓝 */
+  --space-medium: #16213e;         /* 中等深度蓝 */
+  --space-light: #0f3460;          /* 较亮的深蓝 */
+  
+  /* Stellar Colors - Accent Colors */
+  --stellar-purple: #533483;        /* 紫色星云 */
+  --stellar-blue: #2979ff;         /* 明亮蓝色星光 */
+  --stellar-cyan: #00bcd4;         /* 青色等离子 */
+  --stellar-green: #4caf50;        /* 绿色行星 */
+  --stellar-yellow: #ffeb3b;       /* 黄色恒星 */
+  --stellar-orange: #ff9800;       /* 橙色矮星 */
+  --stellar-red: #f44336;          /* 红色巨星 */
+  --stellar-pink: #e91e63;         /* 粉色星云 */
+  
+  /* UI Element Colors */
+  --ui-text-primary: #ffffff;      /* 主要文字颜色 */
+  --ui-text-secondary: #b0bec5;    /* 次要文字颜色 */
+  --ui-text-muted: #607d8b;        /* 暗淡文字颜色 */
+  --ui-border: #263238;            /* 边框颜色 */
+  --ui-surface: #1e2328;           /* 表面颜色 */
+  --ui-surface-hover: #2a2f36;     /* 悬停表面颜色 */
+  
+  /* Status Colors */
+  --status-success: #4caf50;       /* 成功状态 */
+  --status-warning: #ff9800;       /* 警告状态 */
+  --status-error: #f44336;         /* 错误状态 */
+  --status-info: #2979ff;          /* 信息状态 */
+  
+  /* Pixel Art Specific */
+  --pixel-shadow: #000000;         /* 像素阴影 */
+  --pixel-highlight: #ffffff;      /* 像素高光 */
+  --pixel-border-dark: #1a1a2e;    /* 暗色像素边框 */
+  --pixel-border-light: #533483;   /* 亮色像素边框 */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Color System */
+  --color-space-void: var(--space-void);
+  --color-space-deep: var(--space-deep);
+  --color-space-medium: var(--space-medium);
+  --color-space-light: var(--space-light);
+  
+  --color-stellar-purple: var(--stellar-purple);
+  --color-stellar-blue: var(--stellar-blue);
+  --color-stellar-cyan: var(--stellar-cyan);
+  --color-stellar-green: var(--stellar-green);
+  --color-stellar-yellow: var(--stellar-yellow);
+  --color-stellar-orange: var(--stellar-orange);
+  --color-stellar-red: var(--stellar-red);
+  --color-stellar-pink: var(--stellar-pink);
+  
+  --color-ui-text-primary: var(--ui-text-primary);
+  --color-ui-text-secondary: var(--ui-text-secondary);
+  --color-ui-text-muted: var(--ui-text-muted);
+  --color-ui-border: var(--ui-border);
+  --color-ui-surface: var(--ui-surface);
+  --color-ui-surface-hover: var(--ui-surface-hover);
+  
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-error: var(--status-error);
+  --color-status-info: var(--status-info);
+  
+  /* Typography System - Pixel Perfect Fonts */
+  --font-pixel-primary: "Courier New", "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  --font-pixel-secondary: "Consolas", "Lucida Console", "Courier New", monospace;
+  --font-pixel-display: "Courier New", monospace;
+  
+  /* Spacing System (8px base grid) */
+  --space-1: 0.125rem;  /* 2px */
+  --space-2: 0.25rem;   /* 4px */
+  --space-3: 0.5rem;    /* 8px */
+  --space-4: 0.75rem;   /* 12px */
+  --space-5: 1rem;      /* 16px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-7: 2rem;      /* 32px */
+  --space-8: 3rem;      /* 48px */
+  --space-9: 4rem;      /* 64px */
+  
+  /* Border Radius (Pixel-friendly) */
+  --radius-pixel: 0px;      /* 完全无圆角 */
+  --radius-small: 2px;      /* 小圆角 */
+  --radius-medium: 4px;     /* 中等圆角 */
+  --radius-large: 8px;      /* 大圆角 */
+  
+  /* Animation Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  
+  /* Pixel Art Shadows */
+  --shadow-pixel-sm: 2px 2px 0px var(--pixel-shadow);
+  --shadow-pixel-md: 4px 4px 0px var(--pixel-shadow);
+  --shadow-pixel-lg: 6px 6px 0px var(--pixel-shadow);
+  
+  /* Z-Index Scale */
+  --z-background: -1;
+  --z-base: 0;
+  --z-overlay: 10;
+  --z-modal: 50;
+  --z-tooltip: 100;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Pixel Perfect Rendering */
+* {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
+/* Base Styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--space-void);
+  color: var(--ui-text-primary);
+  font-family: var(--font-pixel-primary);
+  line-height: 1.4;
+  font-size: 14px;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive Typography */
+@media (max-width: 640px) {
+  body {
+    font-size: 12px;
+  }
 }
