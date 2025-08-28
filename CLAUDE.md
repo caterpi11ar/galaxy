@@ -6,6 +6,9 @@
 
 Galaxy 是一个创新的多人在线互动小游戏，玩家可以绘制、管理自己的星球，并在共享宇宙中竞争。游戏使用实时互动机制，让玩家体验星球之间的区域级竞争与合作。
 
+## 参考项目
+- https://github.com/Innei/Shiro
+
 ### 认证方式
 - 微信二维码 + Google + GitHub 登录
 - 使用 NextAuth.js 的 Next.js 内置认证
