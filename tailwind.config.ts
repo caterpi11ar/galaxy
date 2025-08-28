@@ -115,6 +115,7 @@ const config: Config = {
         'pixel-pulse': 'pixel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pixel-bounce': 'pixel-bounce 1s infinite',
         'pixel-fade-in': 'pixel-fade-in 0.3s ease-out',
+        'pixel-fade-out': 'pixel-fade-out 0.3s ease-in',
         'pixel-slide-up': 'pixel-slide-up 0.3s ease-out',
         'pixel-slide-down': 'pixel-slide-down 0.3s ease-out',
         'pixel-slide-left': 'pixel-slide-left 0.3s ease-out',
@@ -146,6 +147,10 @@ const config: Config = {
         'pixel-fade-in': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
+        },
+        'pixel-fade-out': {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
         },
         'pixel-slide-up': {
           '0%': {

@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import { LoginModal } from '@/components/auth'
 import { GameControls } from '@/components/game/GameControls'
 import { GameHeader } from '@/components/game/GameHeader'
 import { OnlineStatus } from '@/components/game/OnlineStatus'
@@ -9,6 +11,8 @@ import { useUniverseGame } from '@/hooks/useUniverseGame'
 import { mockPlanets } from '@/lib/mock-data'
 
 export default function UniverseView() {
+  const [showLoginModal, setShowLoginModal] = useState(false)
+
   const {
     zoom,
     pan,
@@ -28,11 +32,21 @@ export default function UniverseView() {
     setIsLoggedIn,
   } = useUniverseGame(mockPlanets)
 
+  // 处理登录按钮点击
+  const handleLoginClick = () => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true)
+    }
+    else {
+      setIsLoggedIn(false) // 退出登录
+    }
+  }
+
   return (
     <div className="min-h-screen bg-space-void text-ui-text-primary font-pixel flex flex-col">
       <GameHeader
         isLoggedIn={isLoggedIn}
-        onToggleLogin={() => setIsLoggedIn(!isLoggedIn)}
+        onToggleLogin={handleLoginClick}
       />
 
       <main className="flex-1 relative overflow-hidden">
@@ -67,6 +81,12 @@ export default function UniverseView() {
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onResetView={handleResetView}
+      />
+
+      {/* 登录弹窗 */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
       />
     </div>
   )
