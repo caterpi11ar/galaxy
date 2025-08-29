@@ -1,7 +1,7 @@
 'use client'
 
 import type { MouseEventHandler } from 'react'
-import type { Planet } from '@/types/game'
+import type { Planet } from '@/types'
 import { useEffect, useState } from 'react'
 
 export function useUniverseGame(planets: Planet[]) {

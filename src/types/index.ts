@@ -1,1 +1,3 @@
-export type { GameState, Planet, UserState } from './game'
+export type { Account } from './account'
+
+export type { Planet } from './planet'

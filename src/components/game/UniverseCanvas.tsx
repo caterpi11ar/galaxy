@@ -1,7 +1,7 @@
 'use client'
 
 import type { MouseEventHandler } from 'react'
-import type { Planet } from '@/types/game'
+import type { Planet } from '@/types'
 import { useEffect, useRef } from 'react'
 
 interface UniverseCanvasProps {
@@ -67,8 +67,8 @@ export function UniverseCanvas({
           ctx.fillStyle = '#000000'
           ctx.fillRect(planetX + 2, planetY + 2, planetSize, planetSize)
 
-          // 星球本体
-          ctx.fillStyle = planet.color
+          // 星球本体 (临时使用默认颜色，后续可根据imageUrl加载图片)
+          ctx.fillStyle = '#4a90e2'
           ctx.fillRect(planetX, planetY, planetSize, planetSize)
 
           // 星球高光

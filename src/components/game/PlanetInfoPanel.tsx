@@ -1,4 +1,4 @@
-import type { Planet } from '@/types/game'
+import type { Planet } from '@/types'
 
 interface PlanetInfoPanelProps {
   planet: Planet
@@ -22,7 +22,10 @@ export function PlanetInfoPanel({ planet, isLoggedIn, onClose }: PlanetInfoPanel
       <div className="space-y-2 text-sm">
         <div className="flex justify-between">
           <span className="text-ui-text-secondary">创建者:</span>
-          <span className="text-ui-text-primary">{planet.author}</span>
+          <span className="text-ui-text-primary">
+            用户
+            {planet.createdBy}
+          </span>
         </div>
 
         <div className="flex justify-between">
