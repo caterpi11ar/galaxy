@@ -1,11 +1,11 @@
+import type { FC } from 'react'
 import Image from 'next/image'
 
-interface GameHeaderProps {
-  isLoggedIn: boolean
-  onToggleLogin: () => void
-}
+export const GameHeader: FC = () => {
+  /** TODO 改为从状态管理中获取 */
+  const isLoggedIn = false
+  const onToggleLogin = () => {}
 
-export function GameHeader({ isLoggedIn, onToggleLogin }: GameHeaderProps) {
   return (
     <header className="border-b-2 border-ui-border bg-space-deep px-4 py-2 flex-shrink-0">
       <div className="flex items-center justify-between max-w-full h-10">

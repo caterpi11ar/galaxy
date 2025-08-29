@@ -35,6 +35,14 @@ pnpm lint
 
 # 类型检查
 pnpm type-check
+
+# 安装核心依赖
+pnpm add @use-gesture/react framer-motion zustand @tanstack/react-query
+pnpm add react-hook-form @hookform/resolvers zod
+pnpm add clsx tailwind-merge date-fns lodash-es react-hot-toast
+
+# 安装开发依赖
+pnpm add -D @types/lodash-es
 ```
 
 ## 架构
@@ -54,10 +62,14 @@ pnpm type-check
 - **框架**: Next.js 14+ (App Router)
 - **前端**: React 19, TypeScript
 - **后端**: Next.js API Routes
-- **数据库**: 待定 (建议 Prisma + PostgreSQL 或 SQLite)
+- **数据库**: Prisma + PostgreSQL (生产) / SQLite (开发)
 - **认证**: NextAuth.js
-- **样式**: 待定 (建议 Tailwind CSS)
+- **样式**: Tailwind CSS + Headless UI
 - **实时通信**: 智能轮询 + SSE (Server-Sent Events)
+- **状态管理**: Zustand
+- **交互处理**: @use-gesture/react (跨平台手势支持)
+- **动画**: Framer Motion
+- **表单验证**: React Hook Form + Zod
 
 ### 开发工作流
 - 单仓库全栈开发
@@ -67,16 +79,18 @@ pnpm type-check
 - 游戏作为 `/games` 目录中的独立模块实现
 
 ### 代码质量规则
-1. 避免代码重复 - 提取通用类型和组件
-2. 保持组件专注 - 使用 hooks 和组件组合
-3. 遵循 React 最佳实践 - 正确使用 Context 和状态管理
-4. 严格使用 TypeScript - 充分利用整个应用的类型安全
-5. 利用 Server Actions 进行数据变更
-6. 实现适当的错误边界和加载状态
+1. **优先使用成熟第三方库** - 避免重复造轮子，选择经过验证的开源解决方案
+2. **跨平台交互一致性** - 所有交互事件必须同时考虑 PC 和移动端，使用 @use-gesture/react 统一处理
+3. **严格 TypeScript 类型安全** - 充分利用类型系统，使用 Zod 进行运行时验证
+4. **组件单一职责** - 使用成熟的 hooks 库和组件组合模式
+5. **无障碍优先设计** - 使用 Radix UI、Headless UI 等支持 ARIA 的组件库
+6. **性能优化** - 利用 React Query 缓存、Framer Motion 优化动画、Immer 处理状态
+7. **错误处理和边界** - 实现完整的错误边界和加载状态管理
+8. **避免自定义实现** - 表单用 React Hook Form，日期用 date-fns，工具函数用 lodash-es
 
 ### 测试策略
 - 使用内置的 Next.js 测试功能
-- 使用 `npm run build` 验证构建工作
+- 使用 `pnpm type-check` 验证构建工作
 - 使用类型检查命令验证类型
 - 独立测试 API 路由
 
@@ -120,6 +134,78 @@ pnpm type-check
 - 避免持久连接成本，友好支持 Serverless 部署
 - 智能缓存减少重复数据传输
 - 数据差异化更新，只传输变化部分
+
+## 跨平台交互设计
+
+### 手势和交互兼容性
+**核心库**: `@use-gesture/react` - 统一处理触摸、鼠标、键盘交互
+
+**支持的交互类型**:
+- **拖拽** (useDrag): 星球移动、画布平移
+- **缩放** (usePinch): 画布缩放、星球详情查看
+- **滑动** (useSwipeable): 页面切换、菜单操作
+- **长按** (useLongPress): 右键菜单、详细操作
+- **滚动** (useScroll): 列表浏览、内容滚动
+
+### 响应式交互策略
+```typescript
+// PC 和移动端统一手势处理示例
+const bind = useGesture({
+  onDrag: ({ offset: [x, y], down }) => {
+    // PC: 鼠标拖拽, 移动: 手指拖拽
+    setPlanetPosition({ x, y })
+  },
+  onPinch: ({ scale, origin }) => {
+    // PC: Ctrl+滚轮, 移动: 双指缩放
+    setZoom(scale)
+  },
+  onWheel: ({ delta: [, dy] }) => {
+    // PC 专用: 鼠标滚轮处理
+    if (!isMobile)
+      setScrollY(prev => prev + dy)
+  }
+})
+```
+
+### 设备特定优化
+- **PC端**: 支持快捷键、右键菜单、精确鼠标操作
+- **移动端**: 触觉反馈、手势导航、屏幕自适应
+- **通用**: 键盘无障碍支持、语音辅助兼容
+
+## 推荐第三方库生态
+
+### UI 组件库
+- **Radix UI**: 高质量无障碍组件库
+- **React Aria**: Adobe 的无障碍组件库
+- **Shadcn UI**: 高质量组件库
+
+### 动画和过渡
+- **React Transition Group**: 组件进出过渡
+- **Lottie React**: 复杂动画播放
+
+### 数据管理
+- **Zustand**: 轻量级状态管理
+- **React Query/TanStack Query**: 服务器状态管理
+- **Immer**: 不可变状态更新
+
+### 表单和验证
+- **React Hook Form**: 高性能表单库
+- **Zod**: TypeScript 优先的模式验证
+- **Yup**: 对象模式验证
+
+### 工具库
+- **date-fns**: 现代化日期处理
+- **lodash-es**: 实用工具函数（ES 模块版本）
+- **clsx**: 条件类名处理
+- **React Hot Toast**: 轻量级通知组件
+
+### 图形和画布
+- pixi.js + react-pixi
+
+### 开发工具
+- **Storybook**: 组件开发和文档
+- **React Developer Tools**: 调试工具
+- **Lighthouse**: 性能和可访问性审计
 
 ## 沟通原则
 

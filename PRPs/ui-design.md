@@ -5,7 +5,7 @@
 - **技术架构**: Next.js 14+ 全栈开发，重点关注 UI 组件开发
 - **设计风格**: 像素风格（Pixel Art）+ 现代 Web 设计， 参考 https://www.pixilart.com/
 - **核心页面**: 主界面（宇宙视图）、排行榜、星球绘制工具
-- **UI 技术栈**: React 19 + TypeScript + Tailwind CSS + Canvas API + React-Bits 动画库
+- **UI 技术栈**: React 19 + TypeScript + Tailwind CSS + React Konva/Konva.js + React-Bits 动画库
 
 ## 第一阶段：UI 基础设施搭建
 
@@ -36,12 +36,12 @@
 
 ## 第二阶段：主要页面 UI 开发
 
-### 4. 主界面 (Universe View) UI 开发 (React-Bits 增强)
+### 4. 主界面 (Universe View) UI 开发 (React Konva + React-Bits 增强)
 - [ ] 4.1 宇宙画布组件架构设计
-  - [ ] Canvas 渲染系统 + React-Bits 背景动画
-  - [ ] 星球绘制算法集成动态效果
-  - [ ] 缩放和平移控制 + 平滑过渡动画
-  - [ ] 集成 React-Bits 粒子系统作为宇宙背景
+  - [ ] React Konva 画布渲染系统 + React-Bits 背景动画
+  - [ ] Konva.js 星球绘制和交互系统
+  - [ ] 缩放和平移控制 (Konva Stage) + 平滑过渡动画
+  - [ ] 集成 React-Bits 粒子系统作为 Konva Layer 背景
 - [ ] 4.2 顶部导航栏实现
   - [ ] Galaxy logo 和标题 + React-Bits 文字动画
   - [ ] 登录状态显示 + 状态切换动画
@@ -83,11 +83,11 @@
   - [ ] 集成 React-Bits 加载动画
   - [ ] 添加内容出现动画效果
 
-### 6. 绘制星球页面 (Planet Creator) UI 开发 (React-Bits 增强)
+### 6. 绘制星球页面 (Planet Creator) UI 开发 (React Konva 增强)
 - [ ] 6.1 绘制画布核心实现
-  - [ ] HTML5 Canvas 像素绘制引擎 + React-Bits 画布动画
-  - [ ] 实时预览功能 + 平滑过渡效果
-  - [ ] 撤销/重做历史管理 + 操作反馈动画
+  - [ ] React Konva 像素绘制引擎 + 画布动画
+  - [ ] Konva.js 实时预览功能 + 平滑过渡效果
+  - [ ] 撤销/重做历史管理 (Konva History) + 操作反馈动画
 - [ ] 6.2 绘制工具栏设计
   - [ ] 画笔工具组件 + React-Bits 工具选择动画
   - [ ] 形状工具组件 + 工具提示动画
@@ -160,9 +160,80 @@
 - [ ] 10.1 键盘导航支持
 - [ ] 10.2 屏幕阅读器支持
 - [ ] 10.3 高对比度模式
-- [ ] 10.4 Canvas 渲染性能优化
+- [ ] 10.4 Konva.js 渲染性能优化
 - [ ] 10.5 图像和资源懒加载
 - [ ] 10.6 减少重渲染优化
+
+## React Konva 集成策略
+
+### React Konva 核心功能规划
+
+#### 主要画布功能 (React Konva)：
+1. **宇宙视图画布**
+   - Konva Stage 作为主画布容器
+   - Layer 管理：背景层、星球层、UI层
+   - 高性能图形渲染和缓存
+   - 平滑缩放和平移交互
+
+2. **星球绘制系统**
+   - 像素级精确绘制工具
+   - 实时画笔、形状、图案工具
+   - 撤销/重做历史管理
+   - 图层管理和合成
+
+3. **交互式元素 (跨平台)**
+   - 星球拖拽和选择 (鼠标 + 触摸)
+   - 点击热区检测 (精确点击 + 触摸友好)
+   - 悬停效果和提示 (PC 悬停 + 移动长按)
+   - 手势支持 (滚轮缩放 + 双指缩放)
+
+4. **性能优化特性**
+   - 智能重绘区域检测
+   - 对象池和缓存管理
+   - 视口裁剪优化
+   - 帧率控制和节流
+
+### 技术集成建议
+
+#### 安装依赖：
+```bash
+# React Konva 核心库
+pnpm add konva react-konva
+pnpm add -D @types/konva
+```
+
+#### 像素风格适配：
+- 禁用 Konva 的默认抗锯齿：`imageSmoothingEnabled: false`
+- 使用整数坐标确保像素完美渲染
+- 实现像素对齐的图形绘制
+- 集成像素艺术调色板限制
+
+#### 与 React-Bits 协调：
+- Konva 处理画布内的交互和渲染
+- React-Bits 处理 UI 层的动画效果
+- 避免重复的动画系统冲突
+- 优化渲染管道和帧率同步
+
+#### 跨平台事件处理：
+- 统一鼠标和触摸事件处理器
+- 自动检测设备类型并适配交互方式
+- PC 端：`mousedown`, `mousemove`, `mouseup`, `wheel`, `contextmenu`
+- 移动端：`touchstart`, `touchmove`, `touchend`, `gesturestart`, `gesturechange`
+- 通用：`pointerdown`, `pointermove`, `pointerup` (现代浏览器优先)
+
+#### 具体交互映射示例：
+- **缩放控制**：
+  - PC：鼠标滚轮上下滚动 (`wheel` 事件)
+  - 移动端：双指捏合/展开手势 (`touchstart` + 多点触控)
+- **拖拽平移**：
+  - PC：鼠标左键拖拽 (`mousedown` + `mousemove`)
+  - 移动端：单指拖拽 (`touchmove`)
+- **右键菜单**：
+  - PC：鼠标右键点击 (`contextmenu` 事件)
+  - 移动端：长按手势 (`touchstart` + 计时器)
+- **悬停效果**：
+  - PC：鼠标悬停 (`mouseenter`/`mouseleave`)
+  - 移动端：点击高亮或长按预览
 
 ## React-Bits 集成策略
 
@@ -220,7 +291,7 @@ npx jsrepo add [component-name]
 ✅ **3个核心页面完整 UI 实现 (动画增强)**
 ✅ **可重用的 UI 组件库 (React-Bits 动画)**
 ✅ **响应式和移动端适配 (动画适配)**
-✅ **高性能 Canvas 绘制引擎 (动画集成)**
+✅ **高性能 React Konva 绘制引擎 (动画集成)**
 ✅ **优秀的用户体验设计 (React-Bits 增强)**
 
 ## 不包括的内容（后续开发阶段）
@@ -240,16 +311,28 @@ npx jsrepo add [component-name]
 - **等宽字体**: 统一使用 Courier New 等等宽字体
 - **简洁图标**: 使用简单的几何图形和表情符号
 
+### 跨平台交互一致性 (PC + 移动端)
+- **统一事件处理**: 所有交互事件必须同时支持鼠标和触摸操作
+- **交互映射策略**:
+  - 缩放：PC 滚轮上下 ↔ 移动端双指捏合
+  - 平移：PC 鼠标拖拽 ↔ 移动端单指滑动
+  - 菜单：PC 右键点击 ↔ 移动端长按手势
+  - 悬停：PC 鼠标悬停 ↔ 移动端点击高亮
+- **PC 端优化**: 鼠标悬停效果、右键菜单、键盘快捷键、精确点击
+- **移动端优化**: 触摸手势、长按操作、触觉反馈、手指友好的触摸目标
+- **自适应交互**: 根据设备类型自动调整交互方式和反馈强度
+- **无障碍支持**: 键盘导航、屏幕阅读器、高对比度模式在所有平台一致
+
 ### 现代 Web 交互 (React-Bits 增强)
 - **直观操作**: 拖拽、缩放、点击等自然交互 + React-Bits 反馈动画
 - **即时反馈**: 悬停效果、状态变化提示 + 丰富的视觉反馈
 - **流畅动画**: React-Bits 专业动画库提供的高品质过渡效果
 - **响应式设计**: 适配各种设备和屏幕尺寸 + 响应式动画适配
 
-### 性能优先 (React-Bits 优化)
-- **Canvas 优化**: 智能重绘和渲染优化 + 动画性能调优
+### 性能优先 (React Konva + React-Bits 优化)
+- **Konva 优化**: 智能重绘和渲染优化 + Layer 管理 + 动画性能调优
 - **组件复用**: 减少不必要的重新渲染 + React-Bits 组件复用
-- **资源管理**: 高效的图像和数据处理 + 动画资源管理
+- **资源管理**: 高效的图像和数据处理 + Konva 缓存 + 动画资源管理
 - **加载策略**: 分步加载和懒加载技术 + 动画按需加载
 
 ---

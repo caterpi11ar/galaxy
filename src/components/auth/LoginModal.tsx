@@ -117,22 +117,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     },
   ]
 
-  // ESC 键关闭
+  // 处理键盘和滚动事件 - 使用 React 事件处理
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleClose()
-      }
-    }
     if (isOpen) {
-      document.addEventListener('keydown', handleEsc)
       document.body.style.overflow = 'hidden'
     }
     return () => {
-      document.removeEventListener('keydown', handleEsc)
       document.body.style.overflow = 'unset'
     }
-  }, [isOpen, handleClose])
+  }, [isOpen])
 
   if (!isOpen && !isClosing)
     return null
@@ -158,6 +151,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           ${isClosing ? 'animate-pixel-slide-up' : 'animate-pixel-slide-down'}
         `}
         onClick={e => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            handleClose()
+          }
+        }}
+        tabIndex={-1}
       >
         {/* 标题栏 */}
         <div
