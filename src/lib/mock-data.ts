@@ -1,9 +1,9 @@
-import type { Planet } from '@/types'
+import type { Planet } from '@/types/planet'
 
 // 模拟星球数据
 export const mockPlanets: Planet[] = [
   {
-    id: 1,
+    id: '1',
     name: '火星殖民地',
     createdBy: 1001,
     createdTime: '2024-01-15T08:30:00Z',
@@ -17,7 +17,7 @@ export const mockPlanets: Planet[] = [
     isDisliked: false,
   },
   {
-    id: 2,
+    id: '2',
     name: '蓝色海洋',
     createdBy: 1002,
     createdTime: '2024-01-16T14:22:00Z',
@@ -31,7 +31,7 @@ export const mockPlanets: Planet[] = [
     isDisliked: false,
   },
   {
-    id: 3,
+    id: '3',
     name: '原谅星球',
     createdBy: 1003,
     createdTime: '2024-01-17T10:45:00Z',
@@ -45,7 +45,7 @@ export const mockPlanets: Planet[] = [
     isDisliked: false,
   },
   {
-    id: 4,
+    id: '4',
     name: '紫色星云',
     createdBy: 1004,
     createdTime: '2024-01-18T16:18:00Z',
@@ -59,7 +59,7 @@ export const mockPlanets: Planet[] = [
     isDisliked: false,
   },
   {
-    id: 5,
+    id: '5',
     name: '金色沙丘',
     createdBy: 1005,
     createdTime: '2024-01-19T09:12:00Z',
@@ -73,7 +73,7 @@ export const mockPlanets: Planet[] = [
     isDisliked: false,
   },
   {
-    id: 6,
+    id: '6',
     name: '冰晶世界',
     createdBy: 1006,
     createdTime: '2024-01-20T12:55:00Z',

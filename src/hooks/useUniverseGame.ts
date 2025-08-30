@@ -1,6 +1,6 @@
 'use client'
 
-import type { Planet } from '@/types'
+import type { Planet } from '@/types/planet'
 import { useEffect, useState } from 'react'
 
 export function useUniverseGame() {

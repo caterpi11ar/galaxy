@@ -1,7 +1,8 @@
 /** 星球 */
 export interface Planet {
   /** ID */
-  id: number
+  id: string
+
   /** 名称 */
   name: string
 
