@@ -1,10 +1,25 @@
 import type { FC } from 'react'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
+import { useState } from 'react'
+import NextAuthLoginModal from '@/components/auth/NextAuthLoginModal'
+import { useNextAuth } from '@/lib/auth/nextauth-hooks'
 
 export const GameHeader: FC = () => {
-  /** TODO 改为从状态管理中获取 */
-  const isLoggedIn = false
-  const onToggleLogin = () => {}
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const { user, isAuthenticated } = useNextAuth()
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true)
+  }
+
+  const handleLogoutClick = async () => {
+    await signOut({ redirect: false })
+  }
+
+  const handleCloseModal = () => {
+    setIsLoginModalOpen(false)
+  }
 
   return (
     <header className="border-b-2 border-ui-border bg-space-deep px-4 py-2 flex-shrink-0">
@@ -65,12 +80,16 @@ export const GameHeader: FC = () => {
 
         {/* 导航按钮 */}
         <nav className="flex items-center gap-3">
-          {isLoggedIn
+          {isAuthenticated
             ? (
                 <div className="flex items-center gap-2">
-                  <div className="text-xs text-stellar-cyan">👤 已登录</div>
+                  <div className="text-xs text-stellar-cyan">
+                    👤
+                    {' '}
+                    {user?.name || '用户'}
+                  </div>
                   <button
-                    onClick={onToggleLogin}
+                    onClick={handleLogoutClick}
                     className="
                       px-3 py-1 bg-ui-surface border-2 border-ui-border
                       text-ui-text-primary text-xs font-pixel
@@ -85,7 +104,7 @@ export const GameHeader: FC = () => {
               )
             : (
                 <button
-                  onClick={onToggleLogin}
+                  onClick={handleLoginClick}
                   className="
                     cursor-pointer
                     px-4 py-1 bg-stellar-blue border-2 border-stellar-blue
@@ -115,6 +134,12 @@ export const GameHeader: FC = () => {
           </button>
         </nav>
       </div>
+
+      {/* 登录弹窗 */}
+      <NextAuthLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={handleCloseModal}
+      />
     </header>
   )
 }

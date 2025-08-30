@@ -17,8 +17,11 @@
   "dependencies": {
     "lucide-react": "^0.542.0",
     "next": "15.5.0",
+    "next-auth": "^4.24.11",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.1.5",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.2.1",
