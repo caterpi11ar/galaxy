@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { GameHeader } from '@/components/game/GameHeader'
-import { UniverseCanvas } from '@/components/game/UniverseCanvas'
+import { ClientOnlyCanvas } from '@/components/game/UniverseCanvas/ClientOnlyCanvas'
 
 export default function UniverseView() {
   const [canvasSize, setCanvasSize] = useState({ width: 800, height: 600 })
@@ -27,7 +27,7 @@ export default function UniverseView() {
 
       {/* 主要内容区域 - 宇宙画布 */}
       <main className="flex-1 p-4">
-        <UniverseCanvas
+        <ClientOnlyCanvas
           width={canvasSize.width}
           height={canvasSize.height}
           className="w-full"
