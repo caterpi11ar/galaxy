@@ -12,6 +12,7 @@ import { PlanetInfoPanel } from './PlanetInfoPanel'
 // 导入子组件
 import { StarField } from './StarField'
 import { SystemPanel } from './SystemPanel'
+import { UniverseLoadingScreen } from './UniverseLoadingScreen'
 import { ZoomControls } from './ZoomControls'
 
 interface UniverseCanvasProps {
@@ -31,6 +32,9 @@ export function UniverseCanvas({
 }: UniverseCanvasProps) {
   const stageRef = useRef<Konva.Stage>(null)
   const lastPointerPos = useRef({ x: 0, y: 0 })
+
+  // 初始化状态
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const {
     viewport,
@@ -52,8 +56,13 @@ export function UniverseCanvas({
   // 悬停状态
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null)
 
-  // 动画循环
+  // 初始化和动画循环
   useEffect(() => {
+    // 延迟一小段时间来模拟初始化过程，让用户能看到加载界面
+    const initTimeout = setTimeout(() => {
+      setIsInitialized(true)
+    }, 1500) // 1.5秒后显示画布
+
     let animationFrame: number
     const animate = () => {
       setAnimationTime(Date.now())
@@ -62,6 +71,7 @@ export function UniverseCanvas({
     animate()
 
     return () => {
+      clearTimeout(initTimeout)
       cancelAnimationFrame(animationFrame)
     }
   }, [])
@@ -170,6 +180,11 @@ export function UniverseCanvas({
       scale: newScale,
     })
   }, [viewport, setViewport])
+
+  // 如果还未初始化完成，显示加载界面
+  if (!isInitialized) {
+    return <UniverseLoadingScreen />
+  }
 
   return (
     <div className={`relative ${className}`}>

@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { Github, X } from 'lucide-react'
 import { signIn } from 'next-auth/react'
+import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
 interface NextAuthLoginModalProps {
@@ -75,7 +76,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
       id: 'github',
       name: 'GitHub 账号登录',
       icon: <Github className="w-5 h-5" />,
-      color: 'gray-400',
+      color: 'ui-text-secondary',
       description: '使用 GitHub 账号登录',
       enabled: true,
       onClick: () => handleLogin('github'),
@@ -83,10 +84,10 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
     {
       id: 'google',
       name: 'Google 账号登录',
-      icon: <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">G</div>,
-      color: 'red-500',
+      icon: <div className="w-5 h-5 bg-stellar-red rounded-full flex items-center justify-center text-white text-xs font-bold">G</div>,
+      color: 'stellar-red',
       description: '使用 Google 账号登录',
-      enabled: true,
+      enabled: false, // 暂时禁用，等待 OAuth 配置
       onClick: () => handleLogin('google'),
     },
   ]
@@ -110,6 +111,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
       fixed inset-0 z-modal flex items-center justify-center p-4
       ${isClosing ? 'animate-pixel-fade-out' : 'animate-pixel-fade-in'}
     `}
+      style={{ zIndex: 50 }}
     >
       {/* 背景遮罩 */}
       <div
@@ -140,7 +142,16 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
         "
         >
           <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 bg-stellar-blue animate-pixel-pulse" />
+            <div className="bg-white p-1 rounded-sm">
+              <Image
+                src="/galaxy.svg"
+                alt="Galaxy"
+                width={16}
+                height={16}
+                className="animate-pixel-pulse"
+                style={{ imageRendering: 'pixelated' }}
+              />
+            </div>
             <h2 className="text-lg font-pixel-display text-ui-text-primary">
               进入 Galaxy 宇宙
             </h2>
@@ -162,8 +173,20 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
         <div className="p-6">
           {/* 欢迎文本 */}
           <div className="text-center mb-8">
-            <div className="text-2xl font-pixel-display text-ui-text-primary mb-2">
-              🌌 欢迎探索
+            <div className="flex items-center justify-center space-x-3 mb-2">
+              <div className="bg-white p-1 rounded-sm">
+                <Image
+                  src="/galaxy.svg"
+                  alt="Galaxy"
+                  width={20}
+                  height={20}
+                  className="animate-pixel-pulse"
+                  style={{ imageRendering: 'pixelated' }}
+                />
+              </div>
+              <div className="text-2xl font-pixel-display text-ui-text-primary">
+                欢迎探索
+              </div>
             </div>
             <p className="text-ui-text-secondary text-sm leading-relaxed">
               选择你的登录方式，开始创建和管理你的专属星球
@@ -187,6 +210,28 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
               const isCurrentLoading = loadingProvider === button.id
               const isDisabled = isLoading && !isCurrentLoading
 
+              // 根据按钮类型设置样式，但使用固定类名而不是动态拼接
+              const getButtonStyles = () => {
+                if (isDisabled) {
+                  return 'opacity-50 cursor-not-allowed border-ui-border'
+                }
+
+                if (button.id === 'github') {
+                  return isHovered
+                    ? 'border-ui-text-secondary bg-ui-text-secondary/10 shadow-pixel-md transform translate-x-1 translate-y-1'
+                    : 'border-ui-border hover:border-ui-text-secondary/50'
+                }
+
+                // 为未来的 Google 按钮预留
+                if (button.id === 'google') {
+                  return isHovered
+                    ? 'border-stellar-red bg-stellar-red/10 shadow-pixel-md transform translate-x-1 translate-y-1'
+                    : 'border-ui-border hover:border-stellar-red/50'
+                }
+
+                return 'border-ui-border'
+              }
+
               return (
                 <button
                   key={button.id}
@@ -200,13 +245,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
                     w-full p-4 border-2 transition-all duration-normal
                     flex items-center justify-center space-x-3
                     font-pixel text-sm bg-ui-surface
-                    ${
-                isDisabled
-                  ? 'opacity-50 cursor-not-allowed border-ui-border'
-                  : isHovered
-                    ? `border-${button.color} bg-${button.color}/10 shadow-pixel-md transform translate-x-1 translate-y-1`
-                    : `border-ui-border hover:border-${button.color}/50`
-                }
+                    ${getButtonStyles()}
                   `}
                 >
                   <div

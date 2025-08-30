@@ -1,6 +1,5 @@
 import type { NextAuthOptions } from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
-import GoogleProvider from 'next-auth/providers/google'
 import { env } from '../env'
 
 export const authConfig: NextAuthOptions = {
@@ -9,10 +8,13 @@ export const authConfig: NextAuthOptions = {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
+    // Google Provider 暂时禁用 - 需要配置 OAuth 应用
+    /*
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
+    */
   ],
   pages: {
     signIn: '/', // 使用自定义登录页面
