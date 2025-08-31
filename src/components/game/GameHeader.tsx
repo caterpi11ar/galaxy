@@ -22,13 +22,13 @@ export const GameHeader: FC = () => {
   }
 
   return (
-    <header className="border-b-2 border-ui-border bg-space-deep px-4 py-2 flex-shrink-0">
-      <div className="flex items-center justify-between max-w-full h-10">
+    <header className="w-full border-b-2 border-ui-border bg-space-deep px-4 py-2 flex-shrink-0">
+      <div className="flex items-center justify-between w-full h-10 pixel-sm:h-12">
         {/* Logo */}
-        <div className="flex items-center gap-3 cursor-pointer">
-          <div className="flex items-center gap-3 relative group">
+        <div className="flex items-center gap-2 pixel-sm:gap-3 cursor-pointer min-w-0">
+          <div className="flex items-center gap-2 pixel-sm:gap-3 relative group">
             {/* 装饰性像素边框容器 */}
-            <div className="relative bg-space-deep border-2 border-stellar-blue px-3 py-2 shadow-pixel-md transition-all duration-normal group-hover:border-stellar-cyan group-hover:shadow-pixel-lg">
+            <div className="relative bg-space-deep border-2 border-stellar-blue px-2 py-1 pixel-sm:px-3 pixel-sm:py-2 shadow-pixel-md transition-all duration-normal group-hover:border-stellar-cyan group-hover:shadow-pixel-lg">
               {/* 四角装饰点 */}
               <div className="absolute -top-1 -left-1 w-2 h-2 bg-stellar-purple animate-pixel-pulse" />
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-stellar-blue" />
@@ -39,22 +39,22 @@ export const GameHeader: FC = () => {
               />
 
               {/* Logo内容 */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 pixel-sm:gap-2">
                 {/* 原有的 galaxy.svg 图标 */}
                 <div className="bg-white p-1 rounded-sm">
                   <Image
                     src="/galaxy.svg"
                     alt="Galaxy"
-                    width={24}
-                    height={24}
-                    className="animate-pixel-pulse"
+                    width={20}
+                    height={20}
+                    className="pixel-sm:w-6 pixel-sm:h-6 animate-pixel-pulse"
                     style={{ imageRendering: 'pixelated' }}
                   />
                 </div>
 
-                {/* 优化后的 GALAXY 文字 */}
-                <div className="relative">
-                  <h1 className="text-lg font-pixel-display font-bold text-transparent bg-gradient-to-r from-stellar-blue via-stellar-cyan to-stellar-blue bg-clip-text tracking-wide">
+                {/* 优化后的 GALAXY 文字 - 移动端缩小 */}
+                <div className="relative hidden pixel-sm:block">
+                  <h1 className="text-base pixel-sm:text-lg font-pixel-display font-bold text-transparent bg-gradient-to-r from-stellar-blue via-stellar-cyan to-stellar-blue bg-clip-text tracking-wide">
                     GALAXY
                   </h1>
                   {/* 文字装饰线 */}
@@ -71,31 +71,34 @@ export const GameHeader: FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-stellar-blue/5 to-stellar-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-normal pointer-events-none" />
             </div>
 
-            {/* 版本标识 */}
-            <div className="text-xs font-pixel text-stellar-cyan opacity-60">
+            {/* 版本标识 - 移动端隐藏 */}
+            <div className="hidden pixel-sm:block text-xs font-pixel text-stellar-cyan opacity-60">
               v1.0
             </div>
           </div>
         </div>
 
         {/* 导航按钮 */}
-        <nav className="flex items-center gap-3">
+        <nav className="flex items-center gap-2 pixel-sm:gap-3 flex-shrink-0">
           {isAuthenticated
             ? (
-                <div className="flex items-center gap-2">
-                  <div className="text-xs text-stellar-cyan">
+                <div className="flex items-center gap-1 pixel-sm:gap-2">
+                  <div className="text-xs text-stellar-cyan truncate max-w-20 pixel-sm:max-w-none">
                     👤
-                    {' '}
-                    {user?.name || '用户'}
+                    <span className="hidden pixel-sm:inline"> </span>
+                    <span className="hidden pixel-sm:inline">{user?.name || '用户'}</span>
                   </div>
                   <button
                     onClick={handleLogoutClick}
                     className="
-                      px-3 py-1 bg-ui-surface border-2 border-ui-border
+                      px-2 py-1 pixel-sm:px-3 pixel-sm:py-1
+                      bg-ui-surface border-2 border-ui-border
                       text-ui-text-primary text-xs font-pixel
                       hover:border-stellar-red hover:text-stellar-red
                       hover:shadow-pixel-sm
                       transition-all duration-fast
+                      touch-manipulation
+                      min-w-0
                     "
                   >
                     退出
@@ -107,12 +110,15 @@ export const GameHeader: FC = () => {
                   onClick={handleLoginClick}
                   className="
                     cursor-pointer
-                    px-4 py-1 bg-stellar-blue border-2 border-stellar-blue
+                    px-3 py-1 pixel-sm:px-4 pixel-sm:py-1
+                    bg-stellar-blue border-2 border-stellar-blue
                     text-white text-xs font-pixel font-bold
                     hover:bg-stellar-cyan hover:border-stellar-cyan
                     hover:shadow-pixel-sm hover:animate-pixel-pulse
                     transition-all duration-fast
                     transform hover:translate-x-0.5 hover:translate-y-0.5
+                    touch-manipulation
+                    active:scale-95
                   "
                 >
                   登录
@@ -122,15 +128,19 @@ export const GameHeader: FC = () => {
           <button
             className="
             cursor-pointer
-            px-3 py-1 bg-stellar-orange border-2 border-stellar-orange
+            px-2 py-1 pixel-sm:px-3 pixel-sm:py-1
+            bg-stellar-orange border-2 border-stellar-orange
             text-white text-xs font-pixel font-bold
             hover:bg-stellar-yellow hover:border-stellar-yellow
             hover:shadow-pixel-sm
             transition-all duration-fast
             transform hover:translate-x-0.5 hover:translate-y-0.5
+            touch-manipulation
+            active:scale-95
           "
           >
-            排行榜
+            <span className="hidden pixel-sm:inline">排行榜</span>
+            <span className="pixel-sm:hidden">🏆</span>
           </button>
         </nav>
       </div>

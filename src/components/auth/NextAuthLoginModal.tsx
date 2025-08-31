@@ -115,7 +115,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
     >
       {/* 背景遮罩 */}
       <div
-        className="absolute inset-0 bg-pixel-shadow/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-pixel-shadow/80 backdrop-blur-sm touch-manipulation"
         onClick={handleClose}
       />
 
@@ -123,7 +123,9 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
       <div
         className={`
           relative bg-ui-surface border-2 border-ui-border
-          shadow-pixel-lg max-w-md w-full max-h-[90vh] overflow-y-auto
+          shadow-pixel-lg 
+          max-w-md w-full max-h-[90vh] overflow-y-auto
+          mx-4 pixel-sm:mx-0
           ${isClosing ? 'animate-pixel-slide-up' : 'animate-pixel-slide-down'}
         `}
         onClick={e => e.stopPropagation()}
@@ -137,11 +139,11 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
         {/* 标题栏 */}
         <div
           className="
-          flex items-center justify-between p-6
+          flex items-center justify-between p-4 pixel-sm:p-6
           border-b-2 border-ui-border bg-space-deep
         "
         >
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 pixel-sm:space-x-3">
             <div className="bg-white p-1 rounded-sm">
               <Image
                 src="/galaxy.svg"
@@ -152,7 +154,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
                 style={{ imageRendering: 'pixelated' }}
               />
             </div>
-            <h2 className="text-lg font-pixel-display text-ui-text-primary">
+            <h2 className="text-base pixel-sm:text-lg font-pixel-display text-ui-text-primary">
               进入 Galaxy 宇宙
             </h2>
           </div>
@@ -163,6 +165,8 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
               p-2 text-ui-text-muted hover:text-ui-text-primary
               hover:bg-ui-surface-hover transition-colors duration-fast
               border border-transparent hover:border-ui-border
+              touch-manipulation
+              min-w-[40px] min-h-[40px] flex items-center justify-center
             "
           >
             <X className="w-5 h-5" />
@@ -170,10 +174,10 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
         </div>
 
         {/* 内容区域 */}
-        <div className="p-6">
+        <div className="p-4 pixel-sm:p-6">
           {/* 欢迎文本 */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center space-x-3 mb-2">
+          <div className="text-center mb-6 pixel-sm:mb-8">
+            <div className="flex items-center justify-center space-x-2 pixel-sm:space-x-3 mb-2">
               <div className="bg-white p-1 rounded-sm">
                 <Image
                   src="/galaxy.svg"
@@ -184,7 +188,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
                   style={{ imageRendering: 'pixelated' }}
                 />
               </div>
-              <div className="text-2xl font-pixel-display text-ui-text-primary">
+              <div className="text-xl pixel-sm:text-2xl font-pixel-display text-ui-text-primary">
                 欢迎探索
               </div>
             </div>
@@ -204,7 +208,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
           </div>
 
           {/* 登录选项 */}
-          <div className="space-y-4">
+          <div className="space-y-3 pixel-sm:space-y-4">
             {loginButtons.map((button) => {
               const isHovered = hoveredProvider === button.id
               const isCurrentLoading = loadingProvider === button.id
@@ -242,9 +246,12 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
                   disabled={isDisabled || !button.enabled}
                   className={`
                     cursor-pointer
-                    w-full p-4 border-2 transition-all duration-normal
-                    flex items-center justify-center space-x-3
+                    w-full p-3 pixel-sm:p-4 border-2 transition-all duration-normal
+                    flex items-center justify-center space-x-2 pixel-sm:space-x-3
                     font-pixel text-sm bg-ui-surface
+                    touch-manipulation
+                    active:scale-98
+                    min-h-[48px] pixel-sm:min-h-[56px]
                     ${getButtonStyles()}
                   `}
                 >
@@ -266,7 +273,7 @@ export default function NextAuthLoginModal({ isOpen, onClose }: NextAuthLoginMod
         </div>
 
         {/* 底部信息 */}
-        <div className="px-6 pb-6">
+        <div className="px-4 pb-4 pixel-sm:px-6 pixel-sm:pb-6">
           <div className="text-center text-xs text-ui-text-muted space-y-1">
             <p>登录即表示你同意我们的服务条款</p>
             <div className="flex items-center justify-center space-x-1">

@@ -3,6 +3,7 @@
 import type Konva from 'konva'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Layer, Rect, Stage } from 'react-konva'
+import { useDeviceType, useGestures } from '@/hooks/useGestures'
 import { useUniverseCanvas } from '@/hooks/useUniverseCanvas'
 
 import { DebugGrid } from './DebugGrid'
@@ -56,6 +57,9 @@ export function UniverseCanvas({
   // 悬停状态
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null)
 
+  // 设备类型检测
+  const { hasTouch } = useDeviceType()
+
   // 初始化和动画循环
   useEffect(() => {
     // 延迟一小段时间来模拟初始化过程，让用户能看到加载界面
@@ -107,7 +111,8 @@ export function UniverseCanvas({
   }, [viewport, getPlanetAtPoint, setSelectedPlanet, setIsDragging])
 
   const handleStagePointerMove = useCallback((e: Konva.KonvaEventObject<PointerEvent>) => {
-    if (!isDragging)
+    // 移动端由手势库处理，桌面端继续使用原逻辑
+    if (!isDragging || hasTouch)
       return
 
     e.evt.preventDefault()
@@ -115,14 +120,17 @@ export function UniverseCanvas({
     const deltaX = e.evt.clientX - lastPointerPos.current.x
     const deltaY = e.evt.clientY - lastPointerPos.current.y
 
+    // 桌面端也添加阻尼效果
+    const dampening = 0.7
+
     setViewport(prev => ({
       ...prev,
-      x: prev.x + deltaX,
-      y: prev.y + deltaY,
+      x: prev.x + deltaX * dampening,
+      y: prev.y + deltaY * dampening,
     }))
 
     lastPointerPos.current = { x: e.evt.clientX, y: e.evt.clientY }
-  }, [isDragging, setViewport])
+  }, [isDragging, setViewport, hasTouch])
 
   // 处理鼠标移动（悬停检测）
   const handleStageMouseMove = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -181,13 +189,106 @@ export function UniverseCanvas({
     })
   }, [viewport, setViewport])
 
+  // 记录上次的偏移量，用于计算增量
+  const lastOffsetRef = useRef<[number, number]>([0, 0])
+
+  // 手势绑定配置
+  const gestureBinds = useGestures({
+    onDrag: ({ offset, down, velocity, first }) => {
+      // 只在移动端使用手势库
+      if (!hasTouch)
+        return
+
+      if (!down) {
+        setIsDragging(false)
+        lastOffsetRef.current = [0, 0]
+        return
+      }
+
+      if (first) {
+        setIsDragging(true)
+        lastOffsetRef.current = offset
+        return
+      }
+
+      // 只有在拖拽状态下才处理
+      if (isDragging) {
+        const [currentX, currentY] = offset
+        const [lastX, lastY] = lastOffsetRef.current
+
+        // 计算增量移动
+        const deltaX = currentX - lastX
+        const deltaY = currentY - lastY
+
+        // 根据速度调整移动距离，避免过于敏感
+        const maxVelocity = 5
+        const velocityMagnitude = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1])
+        const velocityFactor = Math.min(velocityMagnitude, maxVelocity) / maxVelocity
+        const dampening = 0.5 + (0.3 * (1 - velocityFactor)) // 速度越快，阻尼越小
+
+        setViewport(prev => ({
+          ...prev,
+          x: prev.x + deltaX * dampening,
+          y: prev.y + deltaY * dampening,
+        }))
+
+        // 更新上次偏移量
+        lastOffsetRef.current = offset
+      }
+    },
+    onPinch: ({ scale, origin }) => {
+      const [originX, originY] = origin
+
+      // 计算缩放中心点的世界坐标
+      const worldPos = {
+        x: (originX - viewport.x) / viewport.scale,
+        y: (originY - viewport.y) / viewport.scale,
+      }
+
+      const newScale = Math.max(0.1, Math.min(5, scale))
+      const newX = originX - worldPos.x * newScale
+      const newY = originY - worldPos.y * newScale
+
+      setViewport({
+        x: newX,
+        y: newY,
+        scale: newScale,
+      })
+    },
+    onWheel: ({ delta }) => {
+      const [, deltaY] = delta
+      const scaleFactor = deltaY > 0 ? 0.9 : 1.1
+
+      // 获取鼠标位置作为缩放中心
+      const centerX = width / 2
+      const centerY = height / 2
+
+      const worldPos = {
+        x: (centerX - viewport.x) / viewport.scale,
+        y: (centerY - viewport.y) / viewport.scale,
+      }
+
+      const newScale = Math.max(0.1, Math.min(5, viewport.scale * scaleFactor))
+      const newX = centerX - worldPos.x * newScale
+      const newY = centerY - worldPos.y * newScale
+
+      setViewport({
+        x: newX,
+        y: newY,
+        scale: newScale,
+      })
+    },
+    disabled: !isInitialized,
+    sensitivity: hasTouch ? 0.6 : 0.8, // 移动端更低的灵敏度
+  })
+
   // 如果还未初始化完成，显示加载界面
   if (!isInitialized) {
     return <UniverseLoadingScreen />
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} {...gestureBinds()}>
       <Stage
         ref={stageRef}
         width={width}
@@ -199,11 +300,15 @@ export function UniverseCanvas({
         onPointerDown={handleStagePointerDown}
         onPointerMove={handleStagePointerMove}
         onPointerUp={handleStagePointerUp}
-        onMouseMove={handleStageMouseMove}
-        onWheel={handleStageWheel}
-        className="cursor-grab active:cursor-grabbing border-2 border-ui-border bg-space-void"
+        {...(!hasTouch && { onMouseMove: handleStageMouseMove })}
+        {...(!hasTouch && { onWheel: handleStageWheel })}
+        className={`
+          ${hasTouch ? 'touch-manipulation' : 'cursor-grab active:cursor-grabbing'} 
+          border-2 border-ui-border bg-space-void
+        `}
         style={{
           imageRendering: 'pixelated', // 保持像素风格
+          touchAction: hasTouch ? 'none' : 'auto', // 禁用移动端默认触摸行为
         }}
       >
         {/* 背景层 */}
