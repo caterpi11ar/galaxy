@@ -9,6 +9,9 @@ export const GameHeader: FC = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const { user, isAuthenticated } = useNextAuth()
 
+  // 获取显示的用户名
+  const displayName = user?.name || user?.email?.split('@')[0] || '用户'
+
   const handleLoginClick = () => {
     setIsLoginModalOpen(true)
   }
@@ -83,10 +86,11 @@ export const GameHeader: FC = () => {
           {isAuthenticated
             ? (
                 <div className="flex items-center gap-1 pixel-sm:gap-2">
-                  <div className="text-xs text-stellar-cyan truncate max-w-20 pixel-sm:max-w-none">
-                    👤
-                    <span className="hidden pixel-sm:inline"> </span>
-                    <span className="hidden pixel-sm:inline">{user?.name || '用户'}</span>
+                  <div className="text-xs text-stellar-cyan flex items-center gap-1">
+                    <span>👤</span>
+                    <span className="truncate max-w-16 pixel-sm:max-w-24 pixel-md:max-w-none" title={displayName}>
+                      {displayName}
+                    </span>
                   </div>
                   <button
                     onClick={handleLogoutClick}

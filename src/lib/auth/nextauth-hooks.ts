@@ -28,7 +28,7 @@ function mapNextAuthUser(nextAuthUser: NextAuthSession['user']): User | null {
 
   return {
     id: nextAuthUser.id || 'unknown',
-    name: nextAuthUser.name || 'Unknown User',
+    name: nextAuthUser.name || nextAuthUser.email?.split('@')[0] || 'Unknown User',
     email: nextAuthUser.email || null,
     avatar: nextAuthUser.image || null,
     wechatId: null,
