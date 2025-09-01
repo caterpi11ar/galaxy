@@ -22,9 +22,6 @@ Galaxy 是一款创新的多人在线互动像素风格小游戏，玩家在一�
 ```
 # 项目目录结构
 .
-├── .lingma/                    # 项目规则配置目录
-│   └── rules/                  # 规则文件目录
-│       └── frontend-develop.md # 前端开发规范
 ├── PRPs/                       # 项目相关文档目录
 │   ├── start.md                # 项目启动说明文档
 │   └── ui-design.md            # UI设计文档
